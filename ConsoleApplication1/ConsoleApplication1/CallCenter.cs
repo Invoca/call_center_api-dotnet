@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using System.Web;
 
 namespace RingRevenue
 {
@@ -10,9 +10,10 @@ namespace RingRevenue
     /// Represents main API.
     /// </summary>
 
-    public static class Call_Center
+    public static class CallCenter
     {
-        public static readonly Config DefaultConfig = new Config() {
+        public static readonly Config DefaultConfig = new Config()
+        {
             CallCenterID = "",
             APIVersion = "",
             APIUsername = "",
@@ -21,18 +22,17 @@ namespace RingRevenue
 
         private static Config _config = DefaultConfig;
 
-        // get_api_url
-        public static string GetAPIurl(int min, int max)
+        public static string GetAPIurl()
         {
             Random rand = new Random();
-            int api_num = rand.Next() * (max - min) + min;
-            return "https://api" + api_num + ".ringrevenue.com/api/" + APIVersion + "/calls/" + CallCenterID + ".xml";
+            int api_num = rand.Next() % 2;
+            return "https://api" + api_num.ToString() + ".ringrevenue.com/api/" + APIVersion + "/calls/" + CallCenterID + ".xml";
         }
 
         public static Config Config
         {
             get { return _config; }
-            set { _config = (value ?? new Config()).ReverseMerge(DefaultConfig); }
+            set { _config = value; }
         }
 
         public static string CallCenterID

@@ -22,15 +22,5 @@ namespace RingRevenue
 
         // gets or sets APIPassword
         public string APIPassword { get; set; }
-
-        public Config ReverseMerge(Config config)
-        {
-            CallCenterID = CallCenterID ?? config.CallCenterID;
-            APIVersion = APIVersion ?? config.APIVersion;
-            APIUsername = APIUsername ?? config.APIUsername;
-            APIPassword = APIPassword ?? config.APIPassword;
-
-            return this;
-        }
     }
 }
