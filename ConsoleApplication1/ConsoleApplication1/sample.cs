@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -8,24 +9,27 @@ using System.IO;
 using System.Net;
 
 namespace RingRevenue
-{
+{ 
+    
     class sample
     {
         static void Main()
-        {
-            CallCenter.Config.CallCenterID = "1";
-            CallCenter.Config.APIVersion = "2010-04-22";
-            CallCenter.Config.APIUsername = "username@ringrevenue.com";
-            CallCenter.Config.APIPassword = "password";
+        {/*
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("CallCenterID", "1");
+            dict.Add("APIVersion", "2010-04-22");
+            dict.Add("APIUsername", "username@example.com");
+            dict.Add("APIPassword", "password");
+            CallCenter.config(dict);
 
-            // create an array of parameters
-            var parameters = new List<Dictionary<string,object>>();
+            // create a list of parameters
+            List<Dictionary<string,object>> parameters = new List<Dictionary<string,object>>();
 
             Dictionary<string, object> c1params = new Dictionary<string, object>();
             c1params.Add("start_time_t", 1339289018);
             c1params.Add("call_center_call_id", 91234567);
             c1params.Add("duration_in_seconds", 200);
-            c1params.Add("reason_code", "S");
+            c1params.Add("reason_code", "Terms&Conditions");
             c1params.Add("sale_currency", "USD");
             c1params.Add("sale_amount", 1.01);
             parameters.Add(c1params);
@@ -56,18 +60,13 @@ namespace RingRevenue
             c3params.Add("calling_phone_number", "+1 8056801218");
             parameters.Add(c3params);
 
-            // loop through each set of params
-                // create a new Call object w/those params
-                // response = call.save()
-            // if (200..299) then it's sucessful
-            // else it's a failure
             foreach (var dict in parameters)
             {
-                Call call = new Call(dict);
-                HttpWebResponse response = call.Save();
-                Console.WriteLine(response);
-                Thread.Sleep(10000);
+
             }
+            Thread.Sleep(15000);*/
         }
-    }
+    } 
+
+    
 }

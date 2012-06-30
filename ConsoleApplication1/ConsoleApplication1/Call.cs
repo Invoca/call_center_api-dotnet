@@ -1,115 +1,91 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.IO;
 
 namespace RingRevenue
 {
     public class Call
     {
-        // verify presence of start_time_t
-        const int PORT = 80;
+        public const int PORT = 3000; // wire it to something!
 
-        private Dictionary<String, Object> _parameters;
+        private Dictionary<string, object> _parameters;
 
-        public Dictionary<String, Object> Parameters
+        public Dictionary<string, object> Parameters
         {
             get { return _parameters; }
             set { _parameters = value; }
         }
 
 
-        public Call(Dictionary<String, Object> parameters)
+        public Call(Dictionary<string, object> parameters)
         {
             _parameters = parameters;
         }
 
 
-        public StringBuilder ConvertToForm(Dictionary<String, Object> og_params)
+        public string ConvertToForm(Dictionary<String, Object> og_params)
         {
-            StringBuilder builder = new StringBuilder();
-            string br = string.Empty;
+            string builder = string.Empty;
 
             foreach (var pair in og_params)
             {
                 string key = pair.Key;
                 object value = pair.Value;
                 Array list = value as Array;
-                builder.Append(br);
+                builder += '&';
                 if (list != null)
                 {
                     foreach (string element in list)
                     {
-                        builder.Append(key + "[]=" + element);
+                        builder += key + "[]=" + element;
                     }
                 }
                 else
                 {
-                    builder.Append(key + "=" + value);
+                    builder += key + "=" + value;
                 }
-                br = "&";
             }
 
-            return builder;
-        }
-        // escape special chars UrlHelper.Encode(string url)
-
-
-        public void SetBasicAuthHeader(WebRequest req, String userName, String userPassword)
-        {
-            string authInfo = userName + ":" + userPassword;
-            authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
-            req.Headers["Authorization"] = "Basic " + authInfo;
+            return builder.Substring(1,builder.Length-1);
         }
 
 
-        HttpWebRequest FetchRequest()
+        public Dictionary<string,string> request(string method)
         {
-            string api_url = RingRevenue.CallCenter.GetAPIurl();
-            Uri uri = new Uri(api_url);
-
-            StringBuilder builder = ConvertToForm(Parameters);
-            //vv careful
-            builder.Length -= 1;
-
-            var request = (HttpWebRequest)HttpWebRequest.Create(uri);
-            request.Method = "POST";
+            string uri = CallCenter.GetAPIurl();
+            string parameters = ConvertToForm(Parameters);
+            WebRequest request = WebRequest.Create(uri);
             request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = builder.Length;
-            SetBasicAuthHeader(request, RingRevenue.CallCenter.APIUsername, RingRevenue.CallCenter.APIPassword);
-
-            var writer = new StreamWriter(request.GetRequestStream());
-            writer.Write(builder.ToString(), 0, builder.Length);
-            writer.Close();
-
-            return request;
+            request.Method = method;
+            request.Credentials = new NetworkCredential(CallCenter.APIUsername, CallCenter.APIPassword);
+            byte[] bytes = Encoding.UTF8.GetBytes(parameters);
+            request.ContentLength = bytes.Length;
+            Stream os = request.GetRequestStream();
+            os.Write(bytes, 0, bytes.Length);
+            os.Close();
+            WebResponse response = request.GetResponse();
+            string code = ((HttpWebResponse)response).StatusDescription;
+            os = response.GetResponseStream();
+            StreamReader reader = new StreamReader(os);
+            string body = reader.ReadToEnd();
+            reader.Close();
+            os.Close();
+            response.Close();
+            Dictionary<string,string> x = new Dictionary<string,string>();
+            x.Add("status_code", code);
+            x.Add("response_body", body);
+            return x;
         }
 
-
-        HttpWebResponse FetchResponse(HttpWebRequest request)
+        public Dictionary<string,string> save()
         {
-            try
-            {
-                using (var response = (HttpWebResponse)request.GetResponse())
-                {
-                    return response;
-                }
-            }
-            catch (WebException ex)
-            {
-                Console.WriteLine("The following error occured: {0}", ex.Status);
-            }
-        // return response -- but how??
-        }
-
-
-        public HttpWebResponse Save()
-        {
-            var request = FetchRequest();
-            return FetchResponse(request);
+            return request("PUT");
         }
     }
 }

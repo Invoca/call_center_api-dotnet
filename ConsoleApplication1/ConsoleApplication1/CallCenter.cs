@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web;
 
 namespace RingRevenue
 {
@@ -12,47 +11,23 @@ namespace RingRevenue
 
     public static class CallCenter
     {
-        public static readonly Config DefaultConfig = new Config()
-        {
-            CallCenterID = "",
-            APIVersion = "",
-            APIUsername = "",
-            APIPassword = ""
-        };
-
-        private static Config _config = DefaultConfig;
+        public static string CallCenterID = "";
+        public static string APIVersion = "";
+        public static string APIUsername = "";
+        public static string APIPassword = "";
+        public static int APInum = new Random().Next() % 2;
 
         public static string GetAPIurl()
         {
-            Random rand = new Random();
-            int api_num = rand.Next() % 2;
-            return "https://api" + api_num.ToString() + ".ringrevenue.com/api/" + APIVersion + "/calls/" + CallCenterID + ".xml";
+            return "http://api" + APInum.ToString() + ".ringrevenue.com:" + Call.PORT.ToString() + "/api/" + APIVersion + "/calls/" + CallCenterID + ".xml"; // put in port
         }
 
-        public static Config Config
+        public static void config(Dictionary<string, string> dict)
         {
-            get { return _config; }
-            set { _config = value; }
-        }
-
-        public static string CallCenterID
-        {
-            get { return _config.CallCenterID; }
-        }
-
-        public static string APIVersion
-        {
-            get { return _config.APIVersion; }
-        }
-
-        public static string APIUsername
-        {
-            get { return _config.APIUsername; }
-        }
-
-        public static string APIPassword
-        {
-            get { return _config.APIPassword; }
+            CallCenterID = dict["CallCenterID"];
+            APIVersion = dict["APIVersion"];
+            APIUsername = dict["APIUsername"];
+            APIPassword = dict["APIPassword"];
         }
     }
 }
