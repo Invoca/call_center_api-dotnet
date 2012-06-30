@@ -71,9 +71,14 @@ namespace CallCenterAPI.Test
         [TestMethod()]
         public void CallConstructorTest()
         {
-            Dictionary<string, object> parameters = null; // TODO: Initialize to an appropriate value
+            Dictionary<string, object> parameters = new Dictionary<string,object>();
+            parameters.Add("start_time_t", "84023452");
+            parameters.Add("call_center_id", "991234567");
+            parameters.Add("calling_number", "+1 8049274933");
+            parameters.Add("sku_list", "dvd, cleaner");
             Call target = new Call(parameters);
-            Assert.Inconclusive("TODO: Implement code to verify target");
+            Assert.AreEqual(4, target.Parameters.Count);
+            Assert.AreEqual(true, target.Parameters.ContainsValue("84023452"));
         }
         /*
         /// <summary>
