@@ -66,7 +66,7 @@ namespace RingRevenue
 
 
         public Dictionary<string, string> request(string method)
-        {/*
+        {
             string uri = CallCenter.GetAPIurl();
             string parameters = ConvertToForm(Parameters);
             WebRequest request = WebRequest.Create(uri);
@@ -75,29 +75,45 @@ namespace RingRevenue
             request.Credentials = new NetworkCredential(CallCenter.APIUsername, CallCenter.APIPassword);
             byte[] bytes = Encoding.UTF8.GetBytes(parameters);
             request.ContentLength = bytes.Length;
-            Stream os = request.GetRequestStream();
-            os.Write(bytes, 0, bytes.Length);
-            os.Close();
-            WebResponse response = request.GetResponse();
-            string code = ((HttpWebResponse)response).StatusDescription;
-            os = response.GetResponseStream();
-            StreamReader reader = new StreamReader(os);
-            string body = reader.ReadToEnd();
-            reader.Close();
-            os.Close();
-            response.Close();
-            Dictionary<string, string> x = new Dictionary<string, string>();
-            x.Add("status_code", code);
-            x.Add("response_body", body);
-            return x;
-          * */
-            return new Dictionary<string, string>();
+            try
+            {
+                Stream os = request.GetRequestStream();
+                os.Write(bytes, 0, bytes.Length);
+                os.Close();
+                WebResponse response = request.GetResponse();
+                string code = ((HttpWebResponse)response).StatusDescription;
+                os = response.GetResponseStream();
+                StreamReader reader = new StreamReader(os);
+                string body = reader.ReadToEnd();
+                reader.Close();
+                os.Close();
+                response.Close();
+                Dictionary<string, string> x = new Dictionary<string, string>();
+                x.Add("status_code", code);
+                x.Add("response_body", body);
+                return x;
+            }
+            catch (WebException ex)
+            {
+                Dictionary<string, string> x = new Dictionary<string, string>();
+                string body = ((HttpWebResponse)ex.Response).StatusDescription;
+                int code = (int)((HttpWebResponse)ex.Response).StatusCode;
+                x.Add("status_code", code.ToString());
+                x.Add("response_body", body);
+                return x;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Alternative exception caught.");
+                Console.WriteLine(e.Message);
+                return new Dictionary<string, string>();
+            }
         }
 
         public Dictionary<string, string> save()
-        { /*
-            return request("PUT"); */
-            return new Dictionary<string, string>();
+        {
+            return request("POST"); 
+            //return new Dictionary<string, string>();
         }
     }
 }

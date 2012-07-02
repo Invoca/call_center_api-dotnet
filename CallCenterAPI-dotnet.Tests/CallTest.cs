@@ -116,23 +116,36 @@ namespace CallCenterAPI.Test
             string actual = target.ConvertToForm(parameters);
             Assert.AreEqual(expected, actual);
         }
-        /*
+        
         /// <summary>
         ///A test for request
         ///</summary>
         [TestMethod()]
         public void requestTest()
         {
-            Dictionary<string, object> parameters = null; // TODO: Initialize to an appropriate value
-            Call target = new Call(parameters); // TODO: Initialize to an appropriate value
-            string method = string.Empty; // TODO: Initialize to an appropriate value
-            Dictionary<string, string> expected = null; // TODO: Initialize to an appropriate value
-            Dictionary<string, string> actual;
-            actual = target.request(method);
+            // create a new Call object w/the following parameters:
+            String[] a = { "DVD", "cleaner" };
+            String[] b = { "2", "1" };
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("start_time_t", 1339721018);
+            parameters.Add("call_center_call_id", 91234568);
+            parameters.Add("duration_in_seconds", 200);
+            parameters.Add("reason_code", "Terms&Conditions");
+            parameters.Add("sale_currency", "USD");
+            parameters.Add("sale_amount", 1.12);
+            parameters.Add("email_address", "john@doe.com");
+            parameters.Add("sku_list", a);
+            parameters.Add("quantity_list", b);
+            parameters.Add("calling_number", "+1 8889990000");
+            Call target = new Call(parameters);
+
+            string method = "PUT";
+            Dictionary<string, string> expected = null;
+            Dictionary<string, string> actual = target.request(method);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
+        /*
         /// <summary>
         ///A test for save
         ///</summary>

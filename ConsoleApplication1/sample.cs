@@ -14,16 +14,16 @@ namespace RingRevenue
     class sample
     {
         static void Main()
-        {/*
+        {
             Dictionary<string, string> dict = new Dictionary<string, string>();
             dict.Add("CallCenterID", "1");
             dict.Add("APIVersion", "2010-04-22");
-            dict.Add("APIUsername", "username@example.com");
-            dict.Add("APIPassword", "password");
+            dict.Add("APIUsername", "james@ringrevenue.com");
+            dict.Add("APIPassword", "firefox");
             CallCenter.config(dict);
 
             // create a list of parameters
-            List<Dictionary<string,object>> parameters = new List<Dictionary<string,object>>();
+            List<Dictionary<string, object>> parameters = new List<Dictionary<string, object>>();
 
             Dictionary<string, object> c1params = new Dictionary<string, object>();
             c1params.Add("start_time_t", 1339289018);
@@ -60,13 +60,13 @@ namespace RingRevenue
             c3params.Add("calling_phone_number", "+1 8056801218");
             parameters.Add(c3params);
 
-            foreach (var dict in parameters)
+            foreach (var options in parameters)
             {
-
+                Call call = new Call(options);
+                Dictionary<string, string> response = call.save();
+                Console.WriteLine("status_code: {0}\nresponse_body: {1}", response["status_code"], response["response_body"]);
             }
-            Thread.Sleep(15000);*/
+            Thread.Sleep(15000);
         }
     }
-
-
 }
