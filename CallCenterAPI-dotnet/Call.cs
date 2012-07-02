@@ -12,7 +12,7 @@ namespace RingRevenue
 {
     public class Call
     {
-        public const int PORT = 3000; // wire it to something!
+        public const int PORT = 3000;
 
         private Dictionary<string, object> _parameters;
 
@@ -29,35 +29,44 @@ namespace RingRevenue
         }
 
 
+        private void AddSeparator(ref string builder)
+        {
+            if (builder.Length > 0)
+            {
+                builder += '&';
+            }
+        }
+
+
         public string ConvertToForm(Dictionary<String, Object> og_params)
         {
             string builder = string.Empty;
 
             foreach (var pair in og_params)
             {
-                string key = pair.Key;
+                string encodedKey = HttpUtility.UrlEncode(pair.Key);
                 object value = pair.Value;
                 Array list = value as Array;
-                builder += '&';
                 if (list != null)
                 {
                     foreach (string element in list)
                     {
-                        builder += key + "[]=" + element;
+                        AddSeparator(ref builder);
+                        builder += encodedKey + "[]=" + HttpUtility.UrlEncode(element);
                     }
                 }
                 else
                 {
-                    builder += key + "=" + value;
+                    AddSeparator(ref builder);
+                    builder += encodedKey + "=" + HttpUtility.UrlEncode(value.ToString());
                 }
             }
-
-            return builder.Substring(1,builder.Length-1);
+            return builder;
         }
 
 
-        public Dictionary<string,string> request(string method)
-        {
+        public Dictionary<string, string> request(string method)
+        {/*
             string uri = CallCenter.GetAPIurl();
             string parameters = ConvertToForm(Parameters);
             WebRequest request = WebRequest.Create(uri);
@@ -77,15 +86,18 @@ namespace RingRevenue
             reader.Close();
             os.Close();
             response.Close();
-            Dictionary<string,string> x = new Dictionary<string,string>();
+            Dictionary<string, string> x = new Dictionary<string, string>();
             x.Add("status_code", code);
             x.Add("response_body", body);
             return x;
+          * */
+            return new Dictionary<string, string>();
         }
 
-        public Dictionary<string,string> save()
-        {
-            return request("PUT");
+        public Dictionary<string, string> save()
+        { /*
+            return request("PUT"); */
+            return new Dictionary<string, string>();
         }
     }
 }

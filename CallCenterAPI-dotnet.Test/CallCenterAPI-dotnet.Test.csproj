@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F451D072-938B-43FE-838D-E9DDEEC423A7}</ProjectGuid>
+    <ProjectGuid>{90149872-4189-4FD8-9012-EE38826B5EBB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CallCenterAPI.Test</RootNamespace>
-    <AssemblyName>CallCenterAPI.Test</AssemblyName>
+    <RootNamespace>CallCenterAPI_dotnet.Test</RootNamespace>
+    <AssemblyName>CallCenterAPI-dotnet.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -41,7 +41,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -57,13 +56,13 @@
     <Compile Include="sampleTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Shadow Include="Test References\ConsoleApplication1.accessor" />
+    <ProjectReference Include="..\ConsoleApplication2\CallCenterAPI-dotnet.csproj">
+      <Project>{70A063C4-1745-4F83-82CF-E52A138098C8}</Project>
+      <Name>CallCenterAPI-dotnet</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleApplication1\RingRevenue.csproj">
-      <Project>{EF43987D-80D6-4D57-9B78-F00087648795}</Project>
-      <Name>RingRevenue</Name>
-    </ProjectReference>
+    <Shadow Include="Test References\ConsoleApplication2.accessor" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

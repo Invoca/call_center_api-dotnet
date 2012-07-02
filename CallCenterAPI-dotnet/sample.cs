@@ -9,8 +9,8 @@ using System.IO;
 using System.Net;
 
 namespace RingRevenue
-{ 
-    
+{
+
     class sample
     {
         static void Main()
@@ -66,7 +66,7 @@ namespace RingRevenue
             }
             Thread.Sleep(15000);*/
         }
-    } 
+    }
 
-    
+
 }
