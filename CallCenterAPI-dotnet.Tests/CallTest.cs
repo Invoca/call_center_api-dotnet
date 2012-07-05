@@ -4,6 +4,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Moq;
+using System.Web;
+using System.Net;
+using System.IO;
+using System.Collections.Specialized;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CallCenterAPI.Test
 {
@@ -67,6 +75,7 @@ namespace CallCenterAPI.Test
         #endregion
 
 
+
         /// <summary>
         ///A test for Call Constructor
         ///</summary>
@@ -120,7 +129,8 @@ namespace CallCenterAPI.Test
         }
         
         /// <summary>
-        ///A test for request
+        /// A test for request
+        /// IN PROGRESS
         ///</summary>
         [TestMethod()]
         public void requestTest()
@@ -140,11 +150,18 @@ namespace CallCenterAPI.Test
             parameters.Add("quantity_list", b);
             parameters.Add("calling_number", "+1 8889990000");
             Call target = new Call(parameters);
-
-            string method = "PUT";
-            Dictionary<string, string> expected = null;
-            Dictionary<string, string> actual = target.request(method);
-            Assert.AreEqual(expected, actual);
+            // create request object w/valid params
+            // create mock response object w/expected pass/fail properties
+            // parse response, get StatusCode and StatusDescription
+            // return success/failure message
+            string uri = CallCenter.GetAPIurl();
+            WebRequest request = WebRequest.Create(uri);
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Method = "POST"; // PUT?
+            request.Credentials = new NetworkCredential(CallCenter.APIUsername, CallCenter.APIPassword);
+            byte[] bytes = Encoding.UTF8.GetBytes( // enter manually )
+            Assert.AreEqual(expected_pass, actual_pass);
+            Assert.AreEqual(expected_fail, actual_fail);
         }
 
         /*
