@@ -20,8 +20,8 @@ namespace RingRevenue
 
         public static string GetAPIurl()
         {
-	        int APInum = new Random().Next() % 2;
-	        int port = PORT; // put in port
+            int APInum = new Random().Next() % 2;
+            int port = PORT; // put in port
             return "http://api" + APInum.ToString() + ".ringrevenue.com:" + port.ToString() + "/api/" + APIVersion + "/calls/" + CallCenterID + ".xml";
         }
 
