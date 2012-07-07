@@ -12,8 +12,6 @@ namespace RingRevenue
 {
     public class Call
     {
-        public const int PORT = 3000;
-
         private Dictionary<string, object> _parameters;
 
         public Dictionary<string, object> Parameters
@@ -29,12 +27,15 @@ namespace RingRevenue
         }
 
 
-        private void AddSeparator(ref string builder)
+        private void AddParameter(ref string builder, string name, string equals, string value)
         {
             if (builder.Length > 0)
             {
                 builder += '&';
             }
+            builder += HttpUtility.UrlEncode(name);
+            builder += equals;
+            builder += HttpUtility.UrlEncode(value);
         }
 
 
@@ -44,63 +45,64 @@ namespace RingRevenue
 
             foreach (var pair in og_params)
             {
-                string encodedKey = HttpUtility.UrlEncode(pair.Key);
                 object value = pair.Value;
                 Array list = value as Array;
                 if (list != null)
                 {
                     foreach (string element in list)
                     {
-                        AddSeparator(ref builder);
-                        builder += encodedKey + "[]=" + HttpUtility.UrlEncode(element);
+                        AddParameter(ref builder, pair.Key, "[]=", element);
                     }
                 }
                 else
                 {
-                    AddSeparator(ref builder);
-                    builder += encodedKey + "=" + HttpUtility.UrlEncode(value.ToString());
+                    AddParameter(ref builder, pair.Key, "=", value.ToString());
                 }
             }
             return builder;
         }
 
 
-        public Dictionary<string, string> request(string method)
+        public Dictionary<string, string> save()
         {
             string uri = CallCenter.GetAPIurl();
             string parameters = ConvertToForm(Parameters);
             WebRequest request = WebRequest.Create(uri);
             request.ContentType = "application/x-www-form-urlencoded";
-            request.Method = method;
+            request.Method = "POST";
             request.Credentials = new NetworkCredential(CallCenter.APIUsername, CallCenter.APIPassword);
             byte[] bytes = Encoding.UTF8.GetBytes(parameters);
             request.ContentLength = bytes.Length;
             try
             {
-                Stream os = request.GetRequestStream();
-                os.Write(bytes, 0, bytes.Length);
-                os.Close();
-                WebResponse response = request.GetResponse();
-                string code = ((HttpWebResponse)response).StatusDescription;
-                os = response.GetResponseStream();
-                StreamReader reader = new StreamReader(os);
-                string body = reader.ReadToEnd();
-                reader.Close();
-                os.Close();
-                response.Close();
-                Dictionary<string, string> x = new Dictionary<string, string>();
-                x.Add("status_code", code);
-                x.Add("response_body", body);
-                return x;
-            }
-            catch (WebException ex)
-            {
-                Dictionary<string, string> x = new Dictionary<string, string>();
-                string body = ((HttpWebResponse)ex.Response).StatusDescription;
-                int code = (int)((HttpWebResponse)ex.Response).StatusCode;
-                x.Add("status_code", code.ToString());
-                x.Add("response_body", body);
-                return x;
+                using (Stream os = request.GetRequestStream())
+                {
+                    os.Write(bytes, 0, bytes.Length);
+                }
+                using (HttpWebResponse response)
+                {
+                    try
+                    {
+                        response = (HttpWebResponse)request.GetResponse();
+                    }
+                    catch (WebException ex)
+                    {
+                        response = (HttpWebResponse)ex.Response;
+                    }
+                    using (Stream os = response.GetResponseStream())
+                    {
+                        using (StreamReader reader = new StreamReader(os))
+                        {
+                            int code    = response.StatusCode;
+                            string body = reader.ReadToEnd();
+                            
+                            Dictionary<string, string> result = new Dictionary<string, string>();
+                            result.Add("status_code", code);
+			                result.Add("response_body", body);
+                            return result;
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -108,12 +110,6 @@ namespace RingRevenue
                 Console.WriteLine(e.Message);
                 return new Dictionary<string, string>();
             }
-        }
-
-        public Dictionary<string, string> save()
-        {
-            return request("POST"); 
-            //return new Dictionary<string, string>();
         }
     }
 }
