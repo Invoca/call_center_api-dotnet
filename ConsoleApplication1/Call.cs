@@ -73,42 +73,41 @@ namespace RingRevenue
             request.Credentials = new NetworkCredential(CallCenter.APIUsername, CallCenter.APIPassword);
             byte[] bytes = Encoding.UTF8.GetBytes(parameters);
             request.ContentLength = bytes.Length;
+            using (Stream os = request.GetRequestStream())
+            {
+                os.Write(bytes, 0, bytes.Length);
+            }
+            HttpWebResponse response = null;
             try
             {
-                using (Stream os = request.GetRequestStream())
+                try
                 {
-                    os.Write(bytes, 0, bytes.Length);
+                    response = (HttpWebResponse)request.GetResponse();
                 }
-                using (HttpWebResponse response)
+                catch (WebException ex)
                 {
-                    try
+                    response = (HttpWebResponse)ex.Response;
+                }
+                using (Stream os = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(os))
                     {
-                        response = (HttpWebResponse)request.GetResponse();
-                    }
-                    catch (WebException ex)
-                    {
-                        response = (HttpWebResponse)ex.Response;
-                    }
-                    using (Stream os = response.GetResponseStream())
-                    {
-                        using (StreamReader reader = new StreamReader(os))
-                        {
-                            int code    = response.StatusCode;
-                            string body = reader.ReadToEnd();
-                            
-                            Dictionary<string, string> result = new Dictionary<string, string>();
-                            result.Add("status_code", code);
-                            result.Add("response_body", body);
-                            return result;
-                        }
+                        HttpStatusCode code = response.StatusCode;
+                        string body = reader.ReadToEnd();
+
+                        Dictionary<string, string> result = new Dictionary<string, string>();
+                        result.Add("status_code", code.ToString());
+                        result.Add("response_body", body);
+                        return result;
                     }
                 }
             }
-            catch (Exception e)
+            finally
             {
-                Console.WriteLine("Alternative exception caught.");
-                Console.WriteLine(e.Message);
-                return new Dictionary<string, string>();
+                if (response != null)
+                {
+                    response.Close();
+                }
             }
         }
     }

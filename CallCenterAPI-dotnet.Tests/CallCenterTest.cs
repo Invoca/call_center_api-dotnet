@@ -77,7 +77,7 @@ namespace CallCenterAPI.Test
             dict.Add("APIUsername", "username@example.com");
             dict.Add("APIPassword", "password");
             CallCenter.config(dict);
-            string expected = "http://api" + CallCenter.APInum.ToString() + ".ringrevenue.com:3000/api/2010-04-22/calls/1.xml"; // TODO: Initialize to an appropriate value
+            string expected = "http://api" + CallCenter.APInum.ToString() + ".ringrevenue.com:80/api/2010-04-22/calls/1.xml"; // TODO: Initialize to an appropriate value
             string actual;
             actual = CallCenter.GetAPIurl();
             Assert.AreEqual(expected, actual);

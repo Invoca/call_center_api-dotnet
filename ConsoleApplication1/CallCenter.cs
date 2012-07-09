@@ -17,10 +17,10 @@ namespace RingRevenue
         public static string APIVersion = "";
         public static string APIUsername = "";
         public static string APIPassword = "";
+        public static int APInum = new Random().Next() % 2;
 
         public static string GetAPIurl()
         {
-            int APInum = new Random().Next() % 2;
             int port = PORT; // put in port
             return "http://api" + APInum.ToString() + ".ringrevenue.com:" + port.ToString() + "/api/" + APIVersion + "/calls/" + CallCenterID + ".xml";
         }

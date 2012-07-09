@@ -8,7 +8,6 @@ using System.Web;
 using System.Net;
 using System.IO;
 using System.Collections.Specialized;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -127,7 +126,7 @@ namespace CallCenterAPI.Test
             string actual = target.ConvertToForm(parameters);
             Assert.AreEqual(expected, actual);
         }
-        
+        /*
         /// <summary>
         /// A test for request
         /// IN PROGRESS
@@ -163,7 +162,7 @@ namespace CallCenterAPI.Test
             Assert.AreEqual(expected_pass, actual_pass);
             Assert.AreEqual(expected_fail, actual_fail);
         }
-
+        */
         /*
         /// <summary>
         ///A test for save

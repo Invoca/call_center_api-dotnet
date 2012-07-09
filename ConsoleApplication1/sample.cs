@@ -62,9 +62,17 @@ namespace RingRevenue
 
             foreach (var options in parameters)
             {
-                Call call = new Call(options);
-                Dictionary<string, string> response = call.save();
-                Console.WriteLine("status_code: {0}\nresponse_body: {1}", response["status_code"], response["response_body"]);
+                try
+                {
+                    Call call = new Call(options);
+                    Dictionary<string, string> response = call.save();
+                    Console.WriteLine("status_code: {0}\nresponse_body: {1}", response["status_code"], response["response_body"]);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Alternative exception caught.");
+                    Console.WriteLine(e.Message);
+                }
             }
             Thread.Sleep(15000);
         }
