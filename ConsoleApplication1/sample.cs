@@ -8,7 +8,7 @@ using System.Web;
 using System.IO;
 using System.Net;
 
-namespace RingRevenue
+namespace Invoca
 {
 
     class sample
@@ -18,7 +18,7 @@ namespace RingRevenue
             Dictionary<string, string> dict = new Dictionary<string, string>();
             dict.Add("CallCenterID", "1");
             dict.Add("APIVersion", "2010-04-22");
-            dict.Add("APIUsername", "james@ringrevenue.com");
+            dict.Add("APIUsername", "james@invoca.com");
             dict.Add("APIPassword", "firefox");
             CallCenter.config(dict);
 

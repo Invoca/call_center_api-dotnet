@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace RingRevenue
+namespace Invoca
 {
     /// <summary>
     /// Represents main API.
@@ -22,7 +22,7 @@ namespace RingRevenue
         public static string GetAPIurl()
         {
             int port = PORT; // put in port
-            return "http://api" + APInum.ToString() + ".ringrevenue.com:" + port.ToString() + "/api/" + APIVersion + "/calls/" + CallCenterID + ".xml";
+            return "http://api" + APInum.ToString() + ".invoca.com:" + port.ToString() + "/api/" + APIVersion + "/calls/" + CallCenterID + ".xml";
         }
 
         public static void config(Dictionary<string, string> dict)
