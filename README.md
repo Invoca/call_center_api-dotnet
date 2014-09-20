@@ -1,7 +1,7 @@
 call_center_api-dotnet
 ======================
 
-This is a .NET wrapper for the Call Center API which is used to report completed order information from the Call Center back into the Invoca platform. You can read more about this API on the [documentation page](http://support.invoca.com/advertisers/Sales_Reporting_API).
+This is a .NET wrapper for the Call Center API which is used to report completed order information from the Call Center back into the Invoca platform. You can read more about this API on the [documentation page](http://invoca.uservoice.com/knowledgebase/articles/314590-conversion-reporting-api).
 
 Using this wrapper takes 2 steps: 
 
